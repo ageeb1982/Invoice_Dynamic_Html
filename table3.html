@@ -83,7 +83,7 @@
                                 <div class="h-100 d-flex flex-column bd-highlight">
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="itemId"
-                                            placeholder="ادخل بيانات الصنف" autocomplete="off">
+                                            placeholder="ادخل بيانات الصنف" required="ادخل الكمية" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -212,7 +212,7 @@
         let org_qty = document.getElementById("org_qty");
         let total = document.getElementById("total");
         let note = document.getElementById("note");
-        let mytotX = () => { if (price.value == "") { price.value = 0; } if (qty.value == "") { qty.value = 1; } console.log("price =>", price.value, "   qty =>", qty.value, "  Total =>", total.value); total.value = price.value * qty.value; }
+        let mytotX = () => { if (price.value == "") { price.value = 0; } if (qty.value == "") { qty.value = 1; } total.value = price.value * qty.value; console.log("price =>", price.value, "   qty =>", qty.value, "  Total =>", total.value); }
         price.addEventListener("keyup", mytotX)
         qty.addEventListener("keyup", mytotX)
         price.addEventListener("change", mytotX)
@@ -228,6 +228,7 @@
         frmAddX.addEventListener("submit", (oe) => {
 
             oe.preventDefault();
+            let tbodyZ = document.getElementById("tbodyX");
             let lblQ = "";
             let priceQ = 0;
             let qtyQ = 0;
@@ -245,33 +246,89 @@
                     qtyQ = qty.value;
                 }
             });
+            let IsNew = true;
+            console.log(tbodyZ.querySelectorAll("tr"))
+            if (tbodyZ.querySelector("tr") != null) {
+                tbodyZ.querySelectorAll("tr").forEach(rr => {
 
-            console.log("qty=>", qty)
-            console.log("qtyQ=>", qtyQ)
-            console.log("orgQ=>", orgQ)
+                    var frmitems = rr.querySelectorAll(".itemT")
+                    console.log("frmitem=> ", frmitems)
+                    if (frmitems) {
+                        frmitems.forEach(itemT => {
+
+                            //   console.log("itemt=> ", itemT )
+                            //  console.log(`if(${itemT.getAttribute("valuex")}==${txt})=> ${itemT.getAttribute("valuex")==txt}`)
+
+                            if (itemT) {
+                                if (itemT.getAttribute("valuex") == txt) {
+                                    IsNew = false;
+                                    var qtyW = rr.querySelector(".qtyT")
+                                    var totalT = rr.querySelector(".totalT")
+                                    var priceT = rr.querySelector(".priceT")
+
+                                    console.log("qtyT=>", qtyW, " ,qtyQ=>", qtyQ)
+
+                                    qtyQ = Number(qtyW.value) + Number(qtyQ)
+                                    qtyW.value = qtyQ;
+                                    totalT.value = Number(qtyW.value) * Number(priceT.value);
+                                    // console.log("qtyT2=>", qtyW, " ,qtyQ2=>", qtyQ)
+                                    // console.log("#########################################################")
+
+                                    if (Number(qtyQ) > Number(orgQ)) {
+                                        Qty_Down()
+                                        qtyW.value = orgQ;
+                                        qtyQ = orgQ;
+                                        totalT.value = Number(qtyW.value) * Number(priceT.value);
+
+                                        return;
+                                    }
+
+
+
+
+
+
+                                }
+                            }
+                        })
+                    }
+
+
+                })
+            }
+
 
             if (Number(qtyQ) > Number(orgQ)) {
                 Qty_Down()
                 return;
             }
+            //console.log("qty=>", qty)
+            console.log("qtyQ=>", qtyQ, " orgQ=>", orgQ)
+            //console.log()
+
+
+
+
+
+            //<td> <input class="itemT text-center form-control" value="${lblQ}" valuex="${txt}" disabled />  </td>
 
 
             trX = ` <tr>
                             <td>
-                                <input class="item text-center form-control" value="${lblQ}" valuex="${txt}" disabled />
+                                <input class="itemT text-center form-control" value="${lblQ}" valuex="${txt}" disabled />
                             </td>
-                            <td>${priceQ}</td>
-                            <td>${qtyQ}</td>
-                            <td>${priceQ * qtyQ}</td>
-                            <td>${noteQ}</td>
-                            <td>
+                            <td><input class="priceT text-center form-control" value=${priceQ} disabled/></td>
+                            <td><input class="qtyT text-center form-control" value="${qtyQ}" disabled /> <input class="orgQty" value="${orgQ}" type="hidden"  /></td>
+                            <td><input class="totalT text-center form-control" value ="${priceQ * qtyQ}" disabled/></td>
+                            <td><input class="noteT text-center form-control" value="${noteQ}" disabled/> </td>
+                            <td> 
+                               
                             <button onclick="myDel(this)" class="delete text-danger bg-transparent border-0"><i
                                         class="material-icons" title="حذف"></i></button>
                             </td>
                         </tr>`;
 
-            let tbodyZ = document.getElementById("tbodyX")
-            tbodyZ.innerHTML += trX;
+            if (IsNew == true) { tbodyZ.innerHTML += trX; }
             frmAddX.reset();
             itemId.focus();
 
@@ -348,7 +405,7 @@
             maximumItems: 5,
             treshold: 1,
             onSelectItem: ({ label, value }) => {
-                console.log("user selected:", label, value);
+                // console.log("user selected:", label, value);
                 MyValue = value;
                 Mylbl = label;
                 itemId.valuex = value;
@@ -380,8 +437,8 @@
             var msg = "لا يمكن تسجيل كمية اكبر من كمية المستودع"
             var del = "";
             var cancel = "رجوع"
-            var ww = showModal(tit, msg, del, cancel,null,"err");
-            qty.value=org_qty.value;
+            var ww = showModal(tit, msg, del, cancel, null, "err");
+            qty.value = org_qty.value;
 
         }
 
