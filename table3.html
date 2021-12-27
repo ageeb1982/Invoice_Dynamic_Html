@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="ar" dir="rtl">
 
 <head>
     <meta charset="utf-8">
@@ -35,7 +35,7 @@
                             
                         </div> -->
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                                 data-bs-target="#myModal">
                                 <i class="material-icons"></i>
                             </button>
@@ -113,8 +113,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="إلغاء الأمر">
-                        <input type="submit" class="btn btn-success" value="إضافة">
+                        <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" value="إلغاء الأمر">
+                        <input type="submit" class="btn btn-outline-primary" value="إضافة">
                     </div>
                 </form>
 
@@ -165,14 +165,14 @@
             let ErrR = `<div class="modal fade" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-danger">
+          <div class="modal-header bg-danger bg-opacity-25">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             <h5 class="modal-title">${title}</h5>
                       </div>
-          <div class="modal-body">
+          <div class="modal-body bg-danger bg-opacity-10">
             <p>${description}</p>
           </div>
-          <div class="modal-footer bg-danger">
+          <div class="modal-footer bg-danger bg-danger bg-opacity-25">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${noBtnLabel}</button>
            </div>
         </div>
@@ -381,6 +381,7 @@
             var del = "";
             var cancel = "رجوع"
             var ww = showModal(tit, msg, del, cancel,null,"err");
+            qty.value=org_qty.value;
 
         }
 
